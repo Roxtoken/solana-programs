@@ -100,6 +100,7 @@ Anchor realloc Code Example
 To resize an account in Anchor, use the realloc, realloc::payer, and realloc::zero constraints inside your #[derive(Accounts)] struct.
 
 Rust
+
 use anchor_lang::prelude::*;
 
 #[derive(Accounts)]
