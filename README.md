@@ -90,7 +90,8 @@ Earner Registration Blink: Exposes a URL that prompts a user wallet to sign a re
 Payer/Spender Blink: Exposes a UI card for public contributors to interact with the active event (e.g., funding a specific milestone or triggering a spend action), routing funds through the active NameEvent logic.
 
 1. Generalizing "Events" into "Modules" or "Activity Accounts"Instead of hardcoding the program to only think about a single type of "NameEvent," you can design your secondary accounts to be more generic.A NameEvent, a Shop, and a Trade Area can all share the exact same underlying lifecycle pattern: Initialize with funds from the treasury $\rightarrow$ Run interactive logic (Blinks/Web) $\rightarrow$ Close and sweep remaining tokens back to the Primary Reward Account.In your code, you can use an enum to define the type of secondary account being spun up:
-2.Rust
+
+Rust
 ```
 #[derive(AnchorSerialize, AnchorDeserialize, Clone, PartialEq, Eq)]
 pub enum ActivityType {
@@ -98,6 +99,7 @@ pub enum ActivityType {
     Shop,
     TradeArea,
 }
+
 ```
 4. Making the Primary Treasury "Updateable"Your Primary Treasury account holds global configurations (like who the admin is, where leftover rewards go, or what features are enabled). To make it updateable, you want an instruction like update_treasury_config:The Admin Control: Only the designated admin key can sign and update parameters.Adding New Whitelisted Program Routines: If you roll out a new feature (like a "Shop" module), your primary treasury can store flags or configuration data pointing to what types of modules are currently allowed to request funds.Account Resizing (realloc): If your Primary Treasury account needs to store a growing list of metadata, configuration toggles, or active module trackers, Anchor makes it easy to dynamically resize the account on-chain using the realloc constraint so you never run out of space.How it flows together:Primary Treasury acts as the central bank and configuration hub (updateable by admin).When you want to launch Event #2 or open a Shop, your frontend calls initialize_activity (passing whether it's an event or a shop).The program mints a secondary PDA configured for that specific use case, funding it safely from the Treasury.When that shop or event closes down, everything settles back to the Primary Reward Account, keeping your global treasury clean and ready for the next iteration.
 5. 
