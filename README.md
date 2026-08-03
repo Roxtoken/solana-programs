@@ -11,6 +11,7 @@ Core Account Models (Anchor Framework)
 A global config account initialized once by the protocol admin. It accepts deposits from anyone via a standard token transfer, but its authority cannot withdraw funds to an external wallet—it can only initialize and fund approved NameEvent accounts.
 
 Rust
+{
 use anchor_lang::prelude::*;
 use anchor_spl::token::{Token, TokenAccount};
 
@@ -20,7 +21,7 @@ pub struct PrimaryTreasury {
     pub primary_reward_account: Pubkey, // Destination for swept leftover funds
     pub vault_token_account: Pubkey,    // Associated Token Account holding funds
     pub bump: u8,
-}
+}}
 
 2. NameEvent Account (Ephemeral State)
 Created dynamically for each new event. It tracks active participants (Earners) and holds a localized balance allocated from the Primary Treasury. This account is fully closable.
