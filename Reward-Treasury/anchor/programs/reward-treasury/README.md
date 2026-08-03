@@ -3,6 +3,7 @@
 ## Reward-Treasury
 Architecture Overview
 This Solana dApp architecture relies on a Primary Treasury Account that acts as an un-ruggable custody vault. It funnels funds exclusively into ephemeral, program-derived NameEvent Accounts. These secondary accounts handle localized reward distribution and public interactions (via Blinks and web actions), then safely sweep remaining funds back to a Primary Reward Account upon completion.
+
 Summary
 Treat program like a factory, not a storage room. The factory code knows how to build a NameEvent, Shop or Campaign ect, but the actual items are built on-demand, used, and closed out dynamically.
 
