@@ -1,7 +1,6 @@
 
-# solana-programs
-Here lies my Solana-Program-Examples
-
+# solana-program
+## Reward-Treasury
 Architecture Overview
 This Solana dApp architecture relies on a Primary Treasury Account that acts as an un-ruggable custody vault. It funnels funds exclusively into ephemeral, program-derived NameEvent Accounts. These secondary accounts handle localized reward distribution and public interactions (via Blinks and web actions), then safely sweep remaining funds back to a Primary Reward Account upon completion.
 Summary
