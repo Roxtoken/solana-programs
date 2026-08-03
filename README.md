@@ -7,10 +7,12 @@ Summary
 Treat program like a factory, not a storage room. The factory code knows how to build a NameEvent, Shop or Campaign ect, but the actual items are built on-demand, used, and closed out dynamically.
 
 Core Account Models (Anchor Framework)
+
 1. Primary Treasury (Vault State)
 A global config account initialized once by the protocol admin. It accepts deposits from anyone via a standard token transfer, but its authority cannot withdraw funds to an external wallet—it can only initialize and fund approved NameEvent accounts.
-'''
+
 Rust
+```
 
 use anchor_lang::prelude::*;
 use anchor_spl::token::{Token, TokenAccount};
@@ -22,11 +24,15 @@ pub struct PrimaryTreasury {
     pub vault_token_account: Pubkey,    // Associated Token Account holding funds
     pub bump: u8,
 }
-'''
+
+```
+
 2. NameEvent Account (Ephemeral State)
 Created dynamically for each new event. It tracks active participants (Earners) and holds a localized balance allocated from the Primary Treasury. This account is fully closable.
 
 Rust
+```
+
 #[account]
 pub struct NameEvent {
     pub treasury: Pubkey,
@@ -35,7 +41,11 @@ pub struct NameEvent {
     pub bump: u8,
     pub is_active: bool,
 }
+
+```
+
 Program Instructions & Workflow
+
 Step 1: Fund the Primary Treasury
 Instruction: deposit_to_treasury(amount: u64)
 
@@ -80,12 +90,15 @@ Earner Registration Blink: Exposes a URL that prompts a user wallet to sign a re
 Payer/Spender Blink: Exposes a UI card for public contributors to interact with the active event (e.g., funding a specific milestone or triggering a spend action), routing funds through the active NameEvent logic.
 
 1. Generalizing "Events" into "Modules" or "Activity Accounts"Instead of hardcoding the program to only think about a single type of "NameEvent," you can design your secondary accounts to be more generic.A NameEvent, a Shop, and a Trade Area can all share the exact same underlying lifecycle pattern: Initialize with funds from the treasury $\rightarrow$ Run interactive logic (Blinks/Web) $\rightarrow$ Close and sweep remaining tokens back to the Primary Reward Account.In your code, you can use an enum to define the type of secondary account being spun up:
-2.Rust#[derive(AnchorSerialize, AnchorDeserialize, Clone, PartialEq, Eq)]
+2.Rust
+```
+#[derive(AnchorSerialize, AnchorDeserialize, Clone, PartialEq, Eq)]
 pub enum ActivityType {
     NameEvent,
     Shop,
     TradeArea,
 }
+```
 4. Making the Primary Treasury "Updateable"Your Primary Treasury account holds global configurations (like who the admin is, where leftover rewards go, or what features are enabled). To make it updateable, you want an instruction like update_treasury_config:The Admin Control: Only the designated admin key can sign and update parameters.Adding New Whitelisted Program Routines: If you roll out a new feature (like a "Shop" module), your primary treasury can store flags or configuration data pointing to what types of modules are currently allowed to request funds.Account Resizing (realloc): If your Primary Treasury account needs to store a growing list of metadata, configuration toggles, or active module trackers, Anchor makes it easy to dynamically resize the account on-chain using the realloc constraint so you never run out of space.How it flows together:Primary Treasury acts as the central bank and configuration hub (updateable by admin).When you want to launch Event #2 or open a Shop, your frontend calls initialize_activity (passing whether it's an event or a shop).The program mints a secondary PDA configured for that specific use case, funding it safely from the Treasury.When that shop or event closes down, everything settles back to the Primary Reward Account, keeping your global treasury clean and ready for the next iteration.
 5. 
 realloc belongs on your Primary Treasury / Config account, not the secondary NameEvent accounts.
@@ -99,6 +112,8 @@ The Primary Treasury / Config account is permanent. If your platform grows to ad
 Anchor realloc Code Example
 To resize an account in Anchor, use the realloc, realloc::payer, and realloc::zero constraints inside your #[derive(Accounts)] struct.
 
+Rust
+```
 use anchor_lang::prelude::*;
 
 #[derive(Accounts)]
@@ -131,6 +146,8 @@ pub struct PrimaryTreasury {
     pub active_modules: Vec<Pubkey>, 
 }
 
+```
+
 How it works:
 #[instruction(new_space: u32)]: This tells Anchor to look at the instruction parameters so it can calculate the dynamic space value passed from your client.
 
@@ -152,7 +169,11 @@ Spawning on the Fly: When you want to launch a new NameEvent, Shop, or Trade Are
 The Seed Structure: The program generates the secondary account's address using seeds like:
 
 Rust
+```
+
 "seeds = [b"activity", treasury.key().as_ref(), &event_id.to_le_bytes()]"
+
+```
 
 Infinite Scaling: Whether you spin up Event #1 today, a Shop next Tuesday, and Event #2 next month, the program handles them all through the exact same logic. Each one gets its own unique, isolated account on-chain.
 
