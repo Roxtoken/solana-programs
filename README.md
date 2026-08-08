@@ -2,11 +2,12 @@
 #Anchor Program
 
 Simply
-opens a PDA VoteVault to keep VoteTokens safe
-accounts for ReffererVotes
-accounts for Voter Contributions
-Refund = True constraint { Competition Duration? }
-Master closes competition raking back Rents and any left Tokens
+opens a PDA VoteVault to keep VoteTokens safe, 
+accounts for ReffererVotes, 
+accounts for Voter Contributions, 
+Refund = True constraint { Competition Duration? }, 
+Master closes competition raking back Rents and any left Tokens, 
+
 ToDo
 Vote state 
 Event on vote for leaderboard indexing purposes?
