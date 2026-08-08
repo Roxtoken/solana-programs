@@ -2,13 +2,13 @@
 #Anchor Program
 
 Simply
-opens a PDA VoteVault to keep VoteTokens safe, 
-accounts for ReffererVotes, 
-accounts for Voter Contributions, 
-Refund = True constraint { Competition Duration? }, 
-Master closes competition raking back Rents and any left Tokens, 
+Open PDA VoteVault to keep VoteTokens safe,<br>
+accounts for ReffererVotes,<br> 
+accounts for Voter Contributions, <br>
+Refund = True constraint { Competition Duration? },<br> 
+Master closes competition raking back Rents and any left Tokens, <br>
 
-ToDo
+ToDo:<br>
 Vote state 
 Event on vote for leaderboard indexing purposes?
 Duration change:Use start time - end time for competition
@@ -17,15 +17,15 @@ Duration change:Use start time - end time for competition
 #UI
 
 Wallet connection
-Gated Token Amount needed to register a refferalCode
-A Marketer Modal signup Form with embedded Action URL taking inputs before generating Unique code for Marketer ActionURL+RefCode
-Generator script simply uses all valid four letter names + three numbers in 000-999 Range to generate a unique Reffer Code.
+Gated Token Amount needed to register a refferalCode<br>
+A Marketer Modal signup Form with embedded Action URL taking inputs before generating Unique code for Marketer ActionURL+RefCode<br>
+Generator script simply uses all valid four letter names + three numbers in 000-999 Range to generate a unique Reffer Code.<br>
 
 #Solana Action 
 
-Public Voter Votes by sending a token per vote with no restriction on amount and times voted
-All VoteTokens is Returned to Voter after Competition
-Integration
+Public Voter Votes by sending a token per vote with no restriction on amount and times voted<br>
+All VoteTokens is Returned to Voter after Competition<br>
+Integration<br>
 
 ~~~
 
