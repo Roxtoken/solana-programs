@@ -6,7 +6,7 @@ Open PDA VoteVault to keep VoteTokens safe,<br>
 accounts for ReffererVotes,<br> 
 accounts for Voter Contributions, <br>
 Refund = True constraint { Competition Duration? },<br> 
-Master closes competition raking back Rents and any left Tokens, <br>
+Master closes competition raking back Rents and any Tokens Vagrats, <br>
 
 ToDo:<br>
 Vote state 
